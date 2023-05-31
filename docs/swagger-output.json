@@ -1,0 +1,619 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Weather Station API",
+    "description": "JSON REST API for recording weather station data"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081/"
+    }
+  ],
+  "paths": {
+    "/docs": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log user in",
+        "description": "",
+        "parameters": [
+          {
+            "name": "LoginData",
+            "in": "body",
+            "description": "User login credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "User email address"
+                        }
+                      }
+                    },
+                    "password": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "User password"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "test123@gmail.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "abc123!"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "summary": "Log user out",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Log user out by forgetting authentication key",
+          "content": {
+            "application/json": {
+              "schema": {
+                "authenticationKey": "string"
+              },
+              "example": {
+                "authenticationKey": "01493656-2b1b-48ba-b634-0b916b48466f"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Create a new user",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Creating a new user account (singular)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "email": "string",
+                "password": "string",
+                "role": "string",
+                "firstName": "string",
+                "lastName": "string"
+              },
+              "example": {
+                "email": "test123@gmail.com",
+                "password": "abc123!",
+                "role": "admin",
+                "firstName": "Bridgette",
+                "lastName": "Collett"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all users",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "description": "Get a list of all users"
+        }
+      },
+      "patch": {
+        "summary": "Update an existing user by ID",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Creating a new user account (singular)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "id": "string",
+                "email": "string",
+                "password": "string",
+                "role": "string",
+                "firstName": "string",
+                "lastName": "string",
+                "authenticationKey": "array",
+                "items": "string",
+                "nullable": "true"
+              },
+              "example": {
+                "id": "64587fad553b66691a4b8e9d",
+                "email": "test123@gmail.com",
+                "password": "abc123!",
+                "role": "admin",
+                "firstName": "Bridgette",
+                "lastName": "Collett",
+                "authenticationKey": "01493656-2b1b-48ba-b634-0b916b48466f"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user by ID",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Delete a specific (singular) user by their ID",
+          "content": {
+            "application/json": {
+              "schema": {
+                "id": "string"
+              },
+              "example": {
+                "id": "64587fad553b66691a4b8e9d"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Get user by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Get user and account details by searching by ID",
+          "content": {
+            "application/json": {
+              "schema": {
+                "id": "string"
+              },
+              "example": {
+                "id": "64587fad553b66691a4b8e9d"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/update-many": {
+      "patch": {
+        "summary": "Update Many Users",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Update a batch of users by a date range",
+          "content": {
+            "application/json": {
+              "schema": {
+                "role": "string",
+                "fromDate": "string",
+                "toDate": "string"
+              },
+              "example": {
+                "role": "admin",
+                "fromDate": "2023-05-19",
+                "toDate": "2023-05-21"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/delete-many": {
+      "delete": {
+        "summary": "Delete Many Users",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Delete many specific (plural) users by their IDs",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "ids": [
+                  "64675b05e96736b4062c4eb7",
+                  "64675af0e96736b4062c4eb5"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readings": {
+      "post": {
+        "summary": "Insert a new reading",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Insert a new weather reading document",
+          "content": {
+            "application/json": {
+              "schema": {
+                "deviceName": "string",
+                "precipitation": "number",
+                "time": "string",
+                "latitude": "number",
+                "longitude": "number",
+                "atmosphericPressure": "number",
+                "maxWindSpeed": "number",
+                "solarRadiation": "number",
+                "vaporPressure": "number",
+                "humidity": "number",
+                "temperature": "number",
+                "windDirection": "number"
+              },
+              "example": {
+                "deviceName": "My_Sensor",
+                "precipitation": "0.085",
+                "time": "2021-05-07T02:44:05.000+00:00",
+                "latitude": "152.77891",
+                "longitude": "-26.95064",
+                "atmosphericPressure": "128.07",
+                "maxWindSpeed": "4.16",
+                "solarRadiation": "493.42",
+                "vaporPressure": "1.8",
+                "humidity": "72.76",
+                "temperature": "23.89",
+                "windDirection": "153.6"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": " Update one readings specific entry",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Update a single readings precipitation value",
+          "content": {
+            "application/json": {
+              "schema": {
+                "id": "string",
+                "precipitation": "number"
+              },
+              "example": {
+                "id": "642e60ef9c4141e1fd3c897a",
+                "precipitation": "0.9"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readings-many": {
+      "post": {
+        "summary": "Insert Many Readings as an array",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "description": "Insert multiple (plural) readings for a single station",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceName": "string",
+                  "readings": "array",
+                  "items": {
+                    "precipitation": "number",
+                    "time": "string",
+                    "latitude": "number",
+                    "longitude": "number",
+                    "atmosphericPressure": "number",
+                    "maxWindSpeed": "number",
+                    "solarRadiation": "number",
+                    "vaporPressure": "number",
+                    "humidity": "number",
+                    "temperature": "number",
+                    "windDirection": "number"
+                  }
+                }
+              },
+              "example": {
+                "deviceName": "My_Sensor",
+                "readings": [
+                  {
+                    "precipitation": "0.085",
+                    "time": "2021-05-07T02:44:05.000+00:00",
+                    "latitude": "152.77891",
+                    "longitude": "-26.95064",
+                    "atmosphericPressure": "128.07",
+                    "maxWindSpeed": "4.16",
+                    "solarRadiation": "493.42",
+                    "vaporPressure": "1.8",
+                    "humidity": "72.76",
+                    "temperature": "23.89",
+                    "windDirection": "153.6"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readings/max-precipitation": {
+      "get": {
+        "summary": "Get list of max precipitation from readings",
+        "description": "",
+        "parameters": [
+          {
+            "name": "deviceName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {}
+      }
+    },
+    "/readings/by-station/{station}": {
+      "get": {
+        "summary": "Get specific stations readings",
+        "description": "",
+        "parameters": [
+          {
+            "name": "station",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "description": "Get specific station reading at a specific date/time (hour),  returning only temperature, atmospheric pressure, radiation and precipitation values",
+          "content": {
+            "application/json": {
+              "schema": {
+                "station": "string"
+              },
+              "example": {
+                "station": "Woodford_Sensor"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readings/max-temp": {
+      "get": {
+        "summary": "Get all readings Max Temperature by date/time",
+        "description": "",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Get Max Temp by date/time range for all sensors,  returning only sensor name, reading date/time and the precipitation values",
+          "content": {
+            "application/json": {
+              "schema": {
+                "startDate": "string",
+                "endDate": "string"
+              },
+              "example": {
+                "startDate": "2020-01-01",
+                "endDate": "2023-01-01"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
